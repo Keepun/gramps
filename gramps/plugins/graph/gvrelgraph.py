@@ -54,7 +54,7 @@ from gramps.gen.plug.report import Report
 from gramps.gen.plug.report import utils as ReportUtils
 from gramps.gen.plug.report import MenuReportOptions
 from gramps.gen.plug.report import stdoptions
-from gramps.gen.lib import ChildRefType, EventRoleType, EventType
+from gramps.gen.lib import ChildRefType, EventRoleType, EventType, NameType
 from gramps.gen.utils.file import media_path_full, find_file
 from gramps.gui.thumbnails import get_thumbnail_path
 from gramps.gen.relationship import get_relationship_calculator
@@ -470,6 +470,8 @@ class RelGraphReport(Report):
 
         # at the very least, the label must have the person's name
         nm = self._name_display.display(person)
+        if person.get_primary_name().type != NameType.BIRTH:
+            nm = "[%s]" % nm
         if self.bUseHtmlOutput :
             # avoid < and > in the name, as this is html text
             label += nm.replace('<', '&#60;').replace('>', '&#62;')
