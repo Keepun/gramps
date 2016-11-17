@@ -107,7 +107,7 @@ class CalendarWriter(object):
 
         self.writeln("BEGIN:VCALENDAR")
         self.writeln("PRODID:-//GNU//Gramps//EN")
-        self.writeln("VERSION:1.0")
+        self.writeln("VERSION:2.0")
 
         self.total = (len([x for x in self.db.iter_person_handles()]) + 
                       len([x for x in self.db.iter_family_handles()]))
@@ -153,12 +153,12 @@ class CalendarWriter(object):
                     if place_handle:
                         # feature requests 2356, 1657: avoid genitive form
                         place_title = _pd.display_event(self.db, birth)
-                        self.write_vevent(_("Birth of %s") % 
+                        self.write_vevent("%s" %
                             person.get_primary_name().get_name(), 
                             b_date, place_title)
                     else:
                         # feature requests 2356, 1657: avoid genitive form
-                        self.write_vevent(_("Birth of %s") %
+                        self.write_vevent("%s" %
                             person.get_primary_name().get_name(), 
                             b_date)
                         
@@ -223,22 +223,23 @@ class CalendarWriter(object):
         return retval
 
     def write_vevent(self, event_text, date, location=""):
+        (day, month, year, sl) = date.get_start_date()
         date_string = self.format_date(date)
         if date_string is not "":
-            self.writeln("")
-            self.writeln("BEGIN:VEVENT")
-            self.writeln("SUMMARY:%s" % event_text)
-            if location:
-                self.writeln("LOCATION:%s" % location)
-            self.writeln(date_string)
-            self.writeln("END:VEVENT")
-
+            #self.writeln("")
+            #self.writeln("BEGIN:VEVENT")
+            #self.writeln("SUMMARY:%s" % event_text)
+            #if location:
+             #   self.writeln("LOCATION:%s" % location)
+            #self.writeln(date_string)
+            #self.writeln("END:VEVENT")
+#
             date_string = self.format_date(date, 1)
             self.writeln("")
             self.writeln("BEGIN:VEVENT")
-            self.writeln("SUMMARY:"+_("Anniversary: %s") % event_text)
-            if location:
-                self.writeln("LOCATION:%s" % location)
+            self.writeln("SUMMARY:%s %s" % (year, event_text))
+            #if location:
+             #   self.writeln("LOCATION:%s" % location)
             self.writeln("RRULE:FREQ=YEARLY")
             self.writeln(date_string)
             self.writeln("END:VEVENT")
