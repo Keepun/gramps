@@ -470,13 +470,14 @@ class RelGraphReport(Report):
 
         # at the very least, the label must have the person's name
         nm = self._name_display.display(person)
+        nm = nm.replace(', ', lineDelimiter)
         if person.get_primary_name().type != NameType.BIRTH:
             nm = "[%s]" % nm
         if self.bUseHtmlOutput :
             # avoid < and > in the name, as this is html text
             label += nm.replace('<', '&#60;').replace('>', '&#62;')
         else :
-            label += nm
+            label += nm.replace('<BR/>', '\\n').replace('<br/>', '\\n')
         p_id = person.get_gramps_id()
         if self.includeid == 1: # same line
             label += " (%s)" % p_id
